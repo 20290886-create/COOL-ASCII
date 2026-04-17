@@ -2,16 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My JS Website</title>
+    <title>Python to JS ASCII Converter</title>
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        /* Dark mode feels right for ASCII art */
+        body { 
+            background-color: #000; 
+            color: #fff; 
+            font-family: monospace; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+        }
+        #ascii-art { 
+            font-size: 10px; 
+            line-height: 8px; /* Tight line height makes blocks touch */
+            letter-spacing: 0px;
+            white-space: pre; 
+            background-color: #000;
+        }
+        .controls { margin-bottom: 20px; border: 1px solid #444; padding: 20px; border-radius: 8px; }
     </style>
 </head>
 <body>
-    <h1>Hello, GitHub Pages!</h1>
-    <p id="message">Click the button to see some magic.</p>
-    <button id="magicBtn">Click Me!</button>
+
+    <div class="controls">
+        <h2>ASCII Art Generator</h2>
+        <input type="file" id="upload" accept="image/*">
+    </div>
+
+    <pre id="ascii-art"></pre>
 
     <script src="script.js"></script>
 </body>
