@@ -2,37 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Python to JS ASCII Converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python-Style ASCII Art Generator</title>
     <style>
-        /* Dark mode feels right for ASCII art */
+        /* 1. LAYOUT & THEME */
         body { 
-            background-color: #000; 
-            color: #fff; 
-            font-family: "Courier New", Courier, monospace;
+            background-color: #0c0c0c; 
+            color: #00ff41; /* Classic Matrix Green */
+            font-family: "Courier New", Courier, monospace; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             padding: 20px;
+            margin: 0;
         }
+
+        .controls { 
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            color: #ccc;
+        }
+
+        /* 2. THE ASCII CONTAINER */
         #ascii-art { 
             font-size: 10px; 
-            line-height: 10px; /* Tight line height makes blocks touch */
-            letter-spacing: 0px;
+            line-height: 10px; 
             white-space: pre; 
             background-color: #000;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: default;
         }
-        .controls { margin-bottom: 20px; border: 1px solid #444; padding: 20px; border-radius: 8px; }
+
+        /* 3. THE FIX: This forces every character into a perfect grid lane */
+        #ascii-art span {
+            display: inline-block;
+            width: 6.5px; /* Adjust this if the image looks too skinny or wide */
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
     <div class="controls">
-        <h2>ASCII Art Generator</h2>
+        <h2>ASCII Art Creator</h2>
+        <p>Upload a photo to see it in block-character ASCII</p>
         <input type="file" id="upload" accept="image/*">
     </div>
 
     <pre id="ascii-art"></pre>
 
-    <script src="script.js"></script>
+    <script>
+        const uploadInput = document.getElementById('upload');
+        const asciiContainer = document.getElementById('ascii-art');
+
+        // Your exact character set from the Python script
+        const ASCII_CHARS = " ░░▒▒▓▓▁▂▃▄▅▆▇███";
+
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    renderToAscii(img);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function renderToAscii(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+            // RESIZE LOGIC
+            const newWidth = 100; // Characters wide
+            const ratio = img.height / img.width;
+            // Using your 0.55 multiplier from Python for vertical squashing
+            const newHeight = Math.floor(newWidth * ratio * 0.55);
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            // Draw and process
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            const pixels = ctx.getImageData(0, 0, newWidth, newHeight).data;
+
+            let asciiResult = "";
+
+            for (let y = 0; y < newHeight; y++) {
+                for (let x = 0; x < newWidth; x++) {
+                    const index = (y * newWidth + x) * 4;
+                    const r = pixels[index];
+                    const g = pixels[index + 1];
+                    const b = pixels[index + 2];
+
+                    // Brightness logic (Luminance)
+                    const brightness = (0.2126 * r + 0.7152 * g + 0.0722 * b);
+
+                    // Map brightness to your ASCII string
+                    const charIndex = Math.floor((brightness * (ASCII_CHARS.length - 1)) / 255);
+                    const char = ASCII_CHARS[charIndex];
+
+                    // Wrap in colored spans to keep things aligned and colorful
+                    asciiResult += `<span style="color: rgb(${r},${g},${b})">${char}</span>`;
+                }
+                asciiResult += "\n";
+            }
+
+            asciiContainer.innerHTML = asciiResult;
+        }
+    </script>
 </body>
 </html>
