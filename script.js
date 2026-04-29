@@ -1,3 +1,5 @@
+console.log("SCRIPT VERSION: CLEAN ASCII RAMP LOADED");
+
 const uploadInput = document.getElementById('upload');
 const asciiContainer = document.getElementById('ascii-art');
 
