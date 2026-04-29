@@ -65,3 +65,6 @@ function renderToAscii(img) {
 
     asciiContainer.innerHTML = asciiResult;
 }
+
+
+<script src="script.js"></script>
