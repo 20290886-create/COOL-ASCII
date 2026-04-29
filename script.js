@@ -26,7 +26,7 @@ function renderToAscii(img) {
     const ctx = canvas.getContext('2d');
 
     // Logic from your resize_image function
-    const newWidth = 100;
+    const newWidth = 160;
     const ratio = img.height / img.width;
     // Using your 0.55 multiplier for height
     const newHeight = Math.floor(newWidth * ratio * 0.55);
