@@ -2,7 +2,7 @@ const uploadInput = document.getElementById('upload');
 const asciiContainer = document.getElementById('ascii-art');
 
 // Your exact character set from Python
-const ASCII_CHARS = "░░▒▒▓▓██";
+const ASCII_CHARS = "@@wweeii";
 
 uploadInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
