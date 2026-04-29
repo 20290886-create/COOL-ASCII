@@ -90,7 +90,7 @@
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
             // RESIZE LOGIC
-            const newWidth = 100; // Characters wide
+            const newWidth = 160; // Characters wide
             const ratio = img.height / img.width;
             // Using your 0.55 multiplier from Python for vertical squashing
             const newHeight = Math.floor(newWidth * ratio * 0.55);
@@ -119,7 +119,12 @@
                     const char = ASCII_CHARS[charIndex];
 
                     // Wrap in colored spans to keep things aligned and colorful
-                    asciiResult += `<span style="color: rgb(${r},${g},${b})">${char}</span>`;
+                      const blend = 0.6; // lower = more muted
+            const r2 = Math.round(r * blend + 80 * (1 - blend));
+            const g2 = Math.round(g * blend + 80 * (1 - blend));
+            const b2 = Math.round(b * blend + 80 * (1 - blend));
+
+                    asciiResult += `<span style="color: rgb(${r2},${g2},${b2})">${char}</span>`;
                 }
                 asciiResult += "\n";
             }
@@ -130,5 +135,3 @@
 </body>
 </html> 
 
-
-<script src="script.js"></script>
